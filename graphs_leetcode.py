@@ -189,11 +189,51 @@ class Solution(object):
     ############################################ NUM ISLANDS 200 ######################################################
     ###################################################################################################################
     ###################################################################################################################
+    def bfs_island(self, grid, visited, i, j):
+        count = 1
+        queue = [[i, j]]
+        rows = len(grid)
+        cols = len(grid[0])
+        while queue:
+            x, y = queue[0]
+            queue.pop(0)
+            # right
+            if y+1 < cols and visited[x][y+1] == 0 and grid[x][y+1] == '1':
+                visited[x][y+1] = 1
+                queue.append([x, y+1])
+            # bottom
+            if x+1 < rows and visited[x+1][y] == 0 and grid[x+1][y] == '1':
+                visited[x+1][y] = 1
+                queue.append([x+1, y])
+            # left
+            if y-1 >= 0 and visited[x][y-1] == 0 and grid[x][y-1] == '1':
+                visited[x][y-1] = 1
+                queue.append([x, y-1])
+            # top
+            if x-1 >= 0 and visited[x-1][y] == 0 and grid[x-1][y] == '1':
+                visited[x-1][y] = 1
+                queue.append([x-1, y])
+        return count
+
     def numIslands(self, grid):
         """
         :type grid: List[List[str]]
         :rtype: int
+
+        Task: count the number of islands (1's).
+        BFS!
         """
+        if len(grid) == 0:
+            return
+        rows = len(grid)
+        cols = len(grid[0])
+        visited = [ [0 for _ in range(cols)] for _ in range(rows)]
+        count = 0
+        for i in range(rows):
+            for j in range(cols):
+                if grid[i][j] == '1' and visited[i][j] == 0:
+                    count += self.bfs_island(grid, visited, i, j)
+        return count
 
 if __name__ == "__main__":
     ###################################################################################################################
@@ -239,3 +279,5 @@ if __name__ == "__main__":
     ############################################ NUM ISLANDS 200 ######################################################
     ###################################################################################################################
     ###################################################################################################################
+    print(s.numIslands([["1","1","1","1","0"],["1","1","0","1","0"],["1","1","0","0","0"],["0","0","0","0","0"]]))
+    # 1
