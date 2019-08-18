@@ -41,6 +41,31 @@ class Solution(object):
             return False
         return self.isSameTree(p.left, q.left) and self.isSameTree(p.right, q.right)
 
+    ###################################################################################################################
+    ###################################################################################################################
+    ############################################ INVERT TREE 226 ######################################################
+    ###################################################################################################################
+    ###################################################################################################################
+    def invertTree(self, root):
+        """
+        :type root: TreeNode
+        :rtype: TreeNode
+        """
+        if root is None:
+            return None
+        queue = [root]
+
+        while queue:
+            node = queue[0]
+            queue.pop(0)
+            temp = node.left
+            node.left = node.right
+            node.right = temp
+            if node.left is not None: queue.append(node.left)
+            if node.right is not None: queue.append(node.right)
+
+        return root
+
 
 
 
