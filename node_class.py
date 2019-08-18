@@ -4,7 +4,7 @@ class Node(object):
         self.val = val
         self.neighbors = neighbors
 
-class NodeBinaryTree(object):
+class TreeNode(object):
     def __init__(self, x):
         self.val = x
         self.left = None
