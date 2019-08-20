@@ -41,23 +41,35 @@ class CompleteBinaryTree(object):
             curr_level_end = curr_level_start + 2 * num_parents
 
 def inorder_traversal(root):
-    if root is not None:
-        inorder_traversal(root.left)
-        print(str(root.val) + ' ->', end=' ')
-        inorder_traversal(root.right)
+    print()
+    print('inorder traversal: ')
+    def inorder(root):
+        if root is not None:
+            inorder(root.left)
+            print(str(root.val) + ' ->', end=' ')
+            inorder(root.right)
+    inorder(root)
 
 def preorder_traversal(root):
-    if root is not None:
-        print(str(root.val) + ' ->', end=' ')
-        preorder_traversal(root.left)
-        preorder_traversal(root.right)
+    print()
+    print('preorder traversal: ')
+    def preorder(root):
+        if root is not None:
+            print(str(root.val) + ' ->', end=' ')
+            preorder(root.left)
+            preorder(root.right)
+
+    preorder(root)
 
 def postorder_traversal(root):
-    if root is not None:
-        postorder_traversal(root.left)
-        postorder_traversal(root.right)
-        print(str(root.val) + ' ->', end=' ')
-
+    print()
+    print('postorder traversal: ')
+    def postorder(root):
+        if root is not None:
+            postorder(root.left)
+            postorder(root.right)
+            print(str(root.val) + ' ->', end=' ')
+    postorder(root)
 ###################################################################################################################
 ###################################################################################################################
 ####################################### DESERIALIZE AND SERIALIZE BINARY TREE 297 #################################
@@ -71,6 +83,31 @@ class Codec:
         :type root: TreeNode
         :rtype: str
         """
+        if root is None: return None
+        level = [root]
+        data = '#{}'.format(str(root.val))
+        while level:
+            children = [ [n.left, n.right] for n in level]
+            for pair in children:
+                for n in pair:
+                    add = '#{}'.format(str(n.val)) if n else '#None'
+                    data += add
+            level = [n for pair in children for n in pair if n]
+        return data
+
+    def serialize_queue(self, root):
+        # uses queue instead
+        if root is None: return None
+        queue = [root]
+        data = ''
+        while queue:
+            n = queue[0]
+            queue.pop(0)
+            add = '#{}'.format(str(n.val)) if n else '#None'
+            data += add
+            if n is not None: queue.append(n.left)
+            if n is not None: queue.append(n.right)
+        return data
 
     def deserialize(self, data):
         """Decodes your encoded data to tree.
@@ -78,9 +115,9 @@ class Codec:
         :type data: str
         :rtype: TreeNode
         """
-        data = data.split('#')[1:]
-        if len(data) == 0:
+        if data is None or data == '[]' or data == '':
             return None
+        data = data.split('#')[1:]
         root = NodeBinaryTree(int(data[0]))
         node_list = [root]
         level = 1
@@ -94,15 +131,15 @@ class Codec:
             while count < len(data) and count < curr_level_end:
                 if count % 2 == 1:
                     if data[count] == 'None':
-                        node_list.append(None)
-                        node_list[prev_level_start].left = node_list[-1]
+                        # node_list.append(None)
+                        node_list[prev_level_start].left = None
                     else:
                         node_list.append(NodeBinaryTree(int(data[count])))
                         node_list[prev_level_start].left = node_list[-1]
                 elif count % 2 == 0:
                     if data[count] == 'None':
-                        node_list.append(None)
-                        node_list[prev_level_start].right = node_list[-1]
+                        # node_list.append(None)
+                        node_list[prev_level_start].right = None
                     else:
                         node_list.append(NodeBinaryTree(int(data[count])))
                         node_list[prev_level_start].right = node_list[-1]
@@ -126,13 +163,8 @@ if __name__ == "__main__":
     ###################################################################################################################
     ###################################################################################################################
     c = CompleteBinaryTree([0, 1, 2, 3, 4, 5, 6, 7, 8])
-    print('inorder traversal: ')
     inorder_traversal(c.root)
-    print()
-    print('preorder traversal: ')
     preorder_traversal(c.root)
-    print()
-    print('postorder traversal: ')
     postorder_traversal(c.root)
 
     ###################################################################################################################
@@ -149,8 +181,6 @@ if __name__ == "__main__":
     n9.left = n20
     n9.right = n7
     n20.left = n15
-    print()
-    print('preorder traversal 1: ')
     preorder_traversal(n3)
     n3 = NodeBinaryTree(3)
     n9 = NodeBinaryTree(9)
@@ -161,8 +191,6 @@ if __name__ == "__main__":
     n3.right = n20
     n20.left = n15
     n20.right = n7
-    print()
-    print('preorder traversal 2: ')
     preorder_traversal(n3)
     ###################################################################################################################
     ###################################################################################################################
@@ -170,7 +198,20 @@ if __name__ == "__main__":
     ###################################################################################################################
     ###################################################################################################################
     c = Codec()
-    root = c.deserialize('#1#2#3#None#None#4#5')
-    print()
-    print('preorder traversal desrialized: ')
+    root = c.deserialize('#1#2#3#None#None#4#5#None#None#None#None')
     preorder_traversal(root)
+    postorder_traversal(root)
+    inorder_traversal(root)
+    n1 = NodeBinaryTree(1)
+    n2 = NodeBinaryTree(2)
+    n3 = NodeBinaryTree(3)
+    n4 = NodeBinaryTree(4)
+    n5 = NodeBinaryTree(5)
+    n1.left = n2
+    n1.right = n3
+    n3.left = n4
+    n3.right = n5
+    print()
+    print(c.serialize(n1))
+    print(c.serialize_queue(n1))
+    preorder_traversal(c.deserialize(c.serialize(n1)))
