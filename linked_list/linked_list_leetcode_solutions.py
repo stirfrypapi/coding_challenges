@@ -121,6 +121,41 @@ class Solution(object):
             prev.next = trailer.next
         return head
 
+    ###################################################################################################################
+    ###################################################################################################################
+    ############################################ REORDER LIST 143 #####################################################
+    ###################################################################################################################
+    ###################################################################################################################
+    def reorderList(self, head: ListNode) -> None:
+        """
+        Do not return anything, modify head in-place instead.
+        """
+        h = head
+        count = 0
+        while h is not None:
+            count += 1
+            h = h.next
+        middle = math.floor(count/2)
+        middle = head
+        prev = None
+        for i in range(0, middle):
+            prev = middle
+            middle = middle.next
+        reversed_half = self.reverseList(middle)
+        prev.next = reversed_half
+        h = head
+        while h and reversed_half:
+            if h.next is reversed_half:
+                return
+            next_reversed_half = reversed_half.next
+            temp = h.next
+            h.next = reversed_half
+            reversed_half.next = temp
+            reversed_half = next_reversed_half
+            h = temp
+
+
+
 if __name__ == "__main__":
     ###################################################################################################################
     ###################################################################################################################
