@@ -9,9 +9,9 @@ class LinkedList:
             ptr.next = n
             ptr = n
 
-    def print_list(self):
+    def print_list(self, head):
         print()
-        n = self.root
+        n = head
         while n:
             print(str(n.val) + ' ->', end=' ')
             n = n.next
@@ -19,4 +19,4 @@ class LinkedList:
 
 if __name__ == '__main__':
     linked_list = LinkedList([1, 2, 3, 4, 5])
-    linked_list.print_list()
+    linked_list.print_list(linked_list.root)
