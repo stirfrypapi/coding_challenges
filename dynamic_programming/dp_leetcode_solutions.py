@@ -26,9 +26,8 @@ class Solution(object):
     ###########################################################################
     def coinChange(self, coins, amount):
         """
-        :param coins: List[int]
-        :param amount: int
-        :return: int
+        index is the amount
+        ways[i] is ways to make amount
         """
         # bottom up approach
         ways = [amount+1 for _ in range(amount + 1)]
@@ -36,7 +35,7 @@ class Solution(object):
 
         for i in range(1, len(ways)):
             for coin in coins:
-                if i - coin > -1:
+                if i - coin > -1: # subtract coin from our curr_amount=i
                     ways[i] = min(ways[i], ways[i-coin] + 1)
 
         if ways[-1] == amount+1:
@@ -51,7 +50,8 @@ class Solution(object):
     def lengthOfLIS(self, nums):
         """
         bottom up approach:
-
+        index is everything we need to loop up to right bound
+        dp[i] is the lic length
         :param nums:
         :return: length of maximum increasing subsequence
         """
@@ -83,6 +83,50 @@ class Solution(object):
                     dp[j] = True
 
         return dp[-1]
+
+    ###########################################################################
+    ###########################################################################
+    ######################### COMBINATION SUM 4 377 ###########################
+    ###########################################################################
+    ###########################################################################
+    # recursion approach - tle
+    """
+    def combinationSum4(self, nums, target):
+        combinations = 0
+
+        def rec(sum):
+            nonlocal combinations
+            if sum == target:
+                combinations += 1
+                return
+            if sum > target:
+                return
+            for a in nums:
+                rec(sum + a)
+
+        rec(0)
+        return combinations
+    """
+    def combinationSum4(self, nums, target):
+        """
+        bottom up approach:
+        index is the target
+        dp[i] is the # of ways to make target=i
+        dy default, only 1 way to get target=0
+        """
+        dp = [0 for _ in range(target+1)]
+        dp[0] = 1
+
+        for i in range(1, len(dp)):
+            for j in range(len(nums)):
+                if i >= nums[j]:
+                # curr_target will be closer to target if we add nums[j]
+                    dp[i] += dp[i-nums[j]]
+                    # dp[i-nums[j]] is # combinations when target was j less
+                    # than curr_target
+
+        return dp[-1]
+
 
 if __name__ == '__main__':
     s = Solution()
@@ -119,3 +163,12 @@ if __name__ == '__main__':
     print('Word Break:')
     print(s.wordBreak('applepenapple', ['pen', 'apple'])) # True
     print(s.wordBreak('leetcode', ['leet', 'code'])) # True
+
+    ###########################################################################
+    ###########################################################################
+    ######################### COMBINATION SUM 4 377 ###########################
+    ###########################################################################
+    ###########################################################################
+    print('Combination Sum:')
+    print(s.combinationSum4([1, 2, 3], 4))
+    print(s.combinationSum4([4, 2, 1], 32))
