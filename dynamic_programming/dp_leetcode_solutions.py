@@ -126,6 +126,29 @@ class Solution(object):
                     # than curr_target
 
         return dp[-1]
+    ###########################################################################
+    ###########################################################################
+    ######################### HOUSE ROBBER 198 ################################
+    ###########################################################################
+    ###########################################################################
+    def rob(self, nums):
+        """
+        rules: you cant rob two adjacent houses. maximize total loot
+        index is the house address
+        dp[i] is the max loot from houses 0 to i
+        recurrence relation: the max loot is max(dp[i-1], dp[i-2]+nums[i])
+        :param nums:
+        :return: dp[-1]
+        """
+        if nums == []:
+            return 0
+        if len(nums) == 1:
+            return nums[0]
+        dp = [0 for _ in range(len(nums))]
+        dp[0] = nums[0]
+        for i in range(1, len(dp)):
+            dp[i] = max(dp[i-1], dp[i-2] + nums[i])
+        return dp[-1]
 
 
 if __name__ == '__main__':
@@ -172,3 +195,12 @@ if __name__ == '__main__':
     print('Combination Sum:')
     print(s.combinationSum4([1, 2, 3], 4))
     print(s.combinationSum4([4, 2, 1], 32))
+
+    ###########################################################################
+    ###########################################################################
+    ######################### HOUSE ROBBER 198 ################################
+    ###########################################################################
+    ###########################################################################
+    print('House Robber')
+    print(s.rob([1, 2, 3, 1]))
+    print(s.rob([2,7,9,3,1]))
