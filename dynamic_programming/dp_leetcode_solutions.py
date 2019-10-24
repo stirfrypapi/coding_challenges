@@ -150,6 +150,40 @@ class Solution(object):
             dp[i] = max(dp[i-1], dp[i-2] + nums[i])
         return dp[-1]
 
+    ###########################################################################
+    ###########################################################################
+    ######################### HOUSE ROBBER II 213 #############################
+    ###########################################################################
+    ###########################################################################
+    def rob2(self, nums):
+        """
+        extension from house robber 1. the houses are in a circle. so, the
+        first and last houses are neighboring.
+        solution: just split this into two house robber problems:
+        one with nums[0:-2] and one with nums[1:]
+        :param nums:
+        :return:
+        """
+        if nums == []:
+            return 0
+        if len(nums) == 1:
+            return nums[0]
+
+        nums_zero = nums[0:-1]
+        dp_zero = [0 for _ in range(len(nums_zero))]
+        dp_zero[0] = nums_zero[0]
+        for i in range(1, len(dp_zero)):
+            dp_zero[i] = max(dp_zero[i - 1], dp_zero[i - 2] + nums_zero[i])
+
+        nums_one = nums[1:]
+        dp_one = [0 for _ in range(len(nums_one))]
+        dp_one[0] = nums_one[0]
+        for i in range(1, len(dp_one)):
+            dp_one[i] = max(dp_one[i - 1], dp_one[i - 2] + nums_one[i])
+
+        return max(dp_one[-1], dp_zero[-1])
+
+
 
 if __name__ == '__main__':
     s = Solution()
@@ -204,3 +238,12 @@ if __name__ == '__main__':
     print('House Robber')
     print(s.rob([1, 2, 3, 1]))
     print(s.rob([2,7,9,3,1]))
+
+    ###########################################################################
+    ###########################################################################
+    ######################### HOUSE ROBBER II 213 #############################
+    ###########################################################################
+    ###########################################################################
+    print('House Robber II')
+    print(s.rob2([2, 3, 2]))
+    print(s.rob2([1, 2, 3, 1]))
