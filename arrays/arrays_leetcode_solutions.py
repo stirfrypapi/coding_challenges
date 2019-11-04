@@ -26,6 +26,7 @@ class Solution(object):
     ###########################################################################
     def maxProfit(self, prices):
         """
+        key idea: max profit depends on the lowest price
         :param prices: List of stock prices
         :return: max profit (int)
         """
@@ -39,6 +40,23 @@ class Solution(object):
             elif prices[i] - min_price > max_profit:
                 max_profit = prices[i] - min_price
         return max_profit
+
+    ###########################################################################
+    ###########################################################################
+    ######################### CONTAINS DUPLICATE 217 ##########################
+    ###########################################################################
+    ###########################################################################
+    def containsDupicate(self, nums):
+        """
+        :param nums: List[int]
+        :return: bool
+        """
+        n = set()
+        for num in nums:
+            if num in n:
+                return True
+            n.add(num)
+        return False
 
 
 if __name__ == "__main__":
@@ -60,3 +78,12 @@ if __name__ == "__main__":
     print('Best Time to Buy & Sell Stock')
     print(s.maxProfit([7, 1, 5, 3, 6, 4]))
     # 5 because buy on day 2 and sell on day -2
+
+    ###########################################################################
+    ###########################################################################
+    ######################### CONTAINS DUPLICATE 217 ##########################
+    ###########################################################################
+    ###########################################################################
+    print('Contains Duplicate')
+    print(s.containsDupicate([1, 2, 3, 4])) # False
+    print(s.containsDupicate([1, 1, 4, 5])) # True
