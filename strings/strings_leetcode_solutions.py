@@ -72,6 +72,47 @@ class Solution(object):
         t.sort()
         return s == t
 
+    ###########################################################################
+    ###########################################################################
+    #### GROUP ANAGRAMS 49 ####################################################
+    ###########################################################################
+    ###########################################################################
+    def groupAnagrams(self, strs):
+        """Group strings with same anagrams."""
+        d = {}
+
+        for s in strs:
+            sanitize = list(self.sanitize_string(s))
+            sanitize.sort()
+            sanitize = "".join(sanitize)
+            if sanitize not in d:
+                d[sanitize] = [s]
+            else:
+                d[sanitize].append(s)
+
+        res = []
+        for key, value in d.items():
+            res.append(value)
+        return res
+
+    ###########################################################################
+    ###########################################################################
+    #### LONGEST SUBSTRING WITHOUT REPEATING CHARACTERS 3 #####################
+    ###########################################################################
+    ###########################################################################
+    def lengthOfLongestSubstring(self, s):
+        """Return length of longest substring with no repeating characters."""
+        chars_dict, start, max_len = {}, 0, 0
+
+        for i in range(len(s)):
+            if s[i] in chars_dict and start <= chars_dict[s[i]]:
+                start = chars_dict[s[i]] + 1
+            else:
+                max_len = max(max_len, i - start + 1)
+
+            chars_dict[s[i]] = i
+
+        return max_len
 
 if __name__ == "__main__":
     s = Solution()
@@ -102,3 +143,19 @@ if __name__ == "__main__":
     ###########################################################################
     print("Valid Anagram 242")
     print(s.isAnagram("anagram", "naamarg")) # True
+
+    ###########################################################################
+    ###########################################################################
+    #### GROUP ANAGRAMS 49 ####################################################
+    ###########################################################################
+    ###########################################################################
+    print("Group Anagrams 49")
+    print(s.groupAnagrams(["eat", "tea", "tan", "ate", "nat", "bat"]))
+
+    ###########################################################################
+    ###########################################################################
+    #### LONGEST SUBSTRING WITHOUT REPEATING CHARACTERS 3 #####################
+    ###########################################################################
+    ###########################################################################
+    print("Longest Substring w/o Repeating Characters 3")
+    print(s.lengthOfLongestSubstring("pwwkew")) # 3
