@@ -132,6 +132,48 @@ class Solution:
 
         return min_cost
 
+    def removeDuplicates(self, s, k):
+        """
+        LC #1209 Remove All Adjacent Duplicates in String II
+
+        s = "abbeeebd", k = 3
+        stack = [{a,1}, {b,2}, {e, 3}]
+            > [{a,1}, {b,2}]
+            > [{a,1}, {b,3}]
+            > [{a,1}, {d,1}]
+        ans = "ad"
+        """
+        stack = []
+
+        # build stack one char at a time
+        # if char is not repeating, set a new count = 1
+        # if char is repeating, set count += 1
+        # delete if the count == k
+        for char in s:
+            if len(stack) == 0:
+                stack.append({"char": char, "count": 1})
+
+            elif stack[-1]["char"] != char:
+                # set new count
+                stack.append({"char": char, "count": 1})
+
+            elif stack[-1]["char"] == char:
+                stack[-1]["count"] += 1
+
+                # delete from stack if count == k
+                if stack[-1]["count"] == k:
+                    stack.pop(-1)
+
+        # build answer based on leftover chars
+        ans = ""
+        for i in range(0, len(stack)):
+            char = stack[i]["char"]
+            count = stack[i]["count"]
+            ans = ans + (char * count)
+
+        return ans
+
 
 if __name__ == "__main__":
     sol = Solution()
+    print(sol.removeDuplicates("deeedbbcccbdaa", 3))
