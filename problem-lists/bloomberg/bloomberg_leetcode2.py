@@ -173,6 +173,44 @@ class Solution:
 
         return ans
 
+    def meetingRoomsII(self, intervals):
+        """
+        LC #919 Meeting Rooms II
+        find minimum number of conference rooms required
+
+        [(0, 30), (5,10), (15,20)]
+
+        think about mapping times on a numver line.
+
+        keep a running count of how many meetings are happening at every time
+        return the max count
+        +1 when meeting starts
+        -1 when meeting ends
+
+        sort starting times in one array, end times in another array
+        two pointers. if minimum of the two is the start time,
+        increment count. start_ptr += 1
+
+        if there is a tie, shift end_ptr += 1
+        """
+        start = sorted([i.start for i in intervals])
+        end = sorted([i.end for i in intervals])
+
+        running_max, count = 0, 0
+        start_ptr, end_ptr = 0, 0
+
+        while start_ptr < len(intervals) and end_ptr < len(intervals):
+            if start[start_ptr] < end[end_ptr]:
+                # another meeting started
+                start_ptr += 1
+                # increment count
+                count += 1
+            else:
+                end_ptr += 1
+                count -= 1
+            running_max = max(running_max, count)
+
+        return running_max
 
 if __name__ == "__main__":
     sol = Solution()

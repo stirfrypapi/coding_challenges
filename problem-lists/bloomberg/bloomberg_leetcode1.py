@@ -122,6 +122,8 @@ class Node:
 class LRUCache:
     """
     LC #146 LRU Cache
+
+    doubly linked list in order to remove and insert O(1)
     """
     def __init__(self, capacity: int):
         self.cap = capacity
